@@ -1,0 +1,1335 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F6F4">
+<meta name="description" content="Skill Streak: dagelijkse micro-learning naast het leertraject van Amsterdam Data Academy.">
+<title>Skill Streak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#F6F6F4;
+  --card:#FFFFFF;
+  --line:#E8E8E6;
+  --line-soft:#F2F2F0;
+  --ink:#2E2E2E;
+  --muted:#76767C;
+  --faint:#C6C6CB;
+  --indigo:#31399C;
+  --indigo-ink:#31399C;
+  --indigo-soft:#EDEEF7;
+  --on-indigo:#FFFFFF;
+  --coral:#D75A48;
+  --coral-ink:#B23C2B;
+  --coral-soft:#FBEDEA;
+  --mint:#7BD9B8;
+  --mint-ink:#15654B;
+  --mint-soft:#E9F8F1;
+  --yellow:#F9D571;
+  --yellow-ink:#7A5B00;
+  --yellow-soft:#FDF3D8;
+  --red:#D7031C;
+  --sans:"Nunito Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --display:"Montserrat",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#151518;--card:#1E1E22;--line:#2F2F35;--line-soft:#26262B;
+    --ink:#F1F1EF;--muted:#A2A2AA;--faint:#5C5C66;
+    --indigo:#3F49C4;--indigo-ink:#9AA2F0;--indigo-soft:#23264A;--on-indigo:#FFFFFF;
+    --coral:#D75A48;--coral-ink:#F0A093;--coral-soft:#3A2420;
+    --mint:#4FBE97;--mint-ink:#8FE3C4;--mint-soft:#18332B;
+    --yellow:#F9D571;--yellow-ink:#F3CF6C;--yellow-soft:#342B14;
+    --red:#E8203A;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#151518;--card:#1E1E22;--line:#2F2F35;--line-soft:#26262B;
+  --ink:#F1F1EF;--muted:#A2A2AA;--faint:#5C5C66;
+  --indigo:#3F49C4;--indigo-ink:#9AA2F0;--indigo-soft:#23264A;--on-indigo:#FFFFFF;
+  --coral:#D75A48;--coral-ink:#F0A093;--coral-soft:#3A2420;
+  --mint:#4FBE97;--mint-ink:#8FE3C4;--mint-soft:#18332B;
+  --yellow:#F9D571;--yellow-ink:#F3CF6C;--yellow-soft:#342B14;
+  --red:#E8203A;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+button{font-family:inherit;}
+input,textarea{font-family:inherit;}
+:focus-visible{outline:2px solid var(--indigo-ink);outline-offset:2px;}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important;}}
+
+.shell{max-width:430px;margin:0 auto;min-height:100%;background:var(--ground);padding-inline:16px;}
+.screen{padding-block:0 120px;}
+.screen--plain{padding-block:0 32px;min-height:calc(100vh - 40px);display:flex;flex-direction:column;}
+
+.appbar{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;margin-inline:-16px;padding:12px 20px;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.brand{display:flex;align-items:center;gap:10px;}
+.mark{width:28px;height:28px;border-radius:8px;background:var(--red);display:flex;align-items:center;justify-content:center;flex:none;}
+.brand-name{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:-.01em;}
+.counts{display:flex;align-items:center;gap:8px;}
+.count{display:inline-flex;align-items:center;gap:5px;background:var(--ground);border-radius:999px;padding:6px 10px;font-family:var(--display);font-weight:700;font-size:12.5px;font-variant-numeric:tabular-nums;}
+.count--streak svg{color:var(--coral);}
+.count--xp svg{color:var(--yellow-ink);}
+
+.stack{display:flex;flex-direction:column;gap:24px;padding-top:20px;}
+.group{display:flex;flex-direction:column;gap:10px;}
+.label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.label-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+.meta{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;}
+.card--tight{padding:16px;}
+.card--flush{padding:8px 12px;}
+
+.level{background:var(--indigo);border-radius:16px;padding:20px;color:var(--on-indigo);}
+.level-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.72);}
+.level-name{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.01em;margin-top:6px;}
+.level-foot{margin-top:10px;display:flex;justify-content:space-between;gap:12px;font-size:12px;color:rgba(255,255,255,.8);}
+.track{height:4px;border-radius:2px;background:rgba(255,255,255,.22);overflow:hidden;margin-top:16px;}
+.track > i{display:block;height:100%;border-radius:2px;background:var(--yellow);transition:width .5s ease;}
+.track--plain{background:var(--line-soft);margin-top:0;}
+.track--plain > i{background:var(--indigo);}
+
+.week{display:flex;justify-content:space-between;gap:4px;}
+.day{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;}
+.dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--line-soft);color:var(--faint);font-family:var(--display);font-weight:700;font-size:12px;}
+.dot--done{background:var(--mint);color:#0E3B2C;}
+.dot--miss i{width:10px;height:2px;border-radius:1px;background:var(--faint);display:block;}
+.dot--today{background:var(--card);border:2px solid var(--indigo-ink);}
+.dot--today i{width:8px;height:8px;border-radius:50%;background:var(--indigo-ink);display:block;}
+.dot--future{background:transparent;border:1.5px dashed var(--line);}
+.day span{font-size:10.5px;font-weight:600;color:var(--muted);}
+.day.is-today span{color:var(--indigo-ink);font-weight:700;}
+.hint{border-top:1px solid var(--line);padding-top:12px;margin-top:14px;font-size:12.5px;color:var(--muted);}
+
+.tagrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tag{background:var(--indigo-soft);color:var(--indigo-ink);font-size:11px;font-weight:700;padding:5px 10px;border-radius:6px;}
+.tag--soft{background:var(--coral-soft);color:var(--coral-ink);}
+.tag--mint{background:var(--mint-soft);color:var(--mint-ink);}
+.q{font-size:17px;font-weight:700;line-height:1.45;letter-spacing:-.01em;text-wrap:balance;}
+.opts{display:flex;flex-direction:column;gap:10px;}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;width:100%;min-height:52px;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:14.5px;font-weight:600;line-height:1.35;cursor:pointer;transition:border-color .15s ease, background .15s ease;}
+.opt:hover:not(:disabled){border-color:var(--indigo-ink);}
+.opt:disabled{cursor:default;}
+.opt--right{border:1.5px solid var(--mint);background:var(--mint-soft);color:var(--mint-ink);font-weight:700;}
+.opt--wrong{border:1.5px solid var(--coral);background:var(--coral-soft);color:var(--coral-ink);font-weight:700;}
+.opt--dim{color:var(--muted);}
+.opt-mark{width:22px;height:22px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;}
+.opt-mark--right{background:var(--mint);color:#0E3B2C;}
+.opt-mark--wrong{background:var(--coral);}
+.radio{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--faint);flex:none;}
+.radio--on{border:6px solid var(--indigo-ink);background:var(--card);}
+
+.fb{border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start;}
+.fb--good{background:var(--mint-soft);color:var(--mint-ink);}
+.fb--bad{background:var(--coral-soft);color:var(--coral-ink);}
+.fb-icon{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;}
+.fb--good .fb-icon{background:var(--mint);color:#0E3B2C;}
+.fb--bad .fb-icon{background:var(--coral);color:#fff;}
+.fb-title{font-family:var(--display);font-weight:700;font-size:15px;}
+.fb-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+.fb-xp{font-family:var(--display);font-weight:700;font-size:13px;}
+.fb-body{font-size:13.5px;line-height:1.5;margin-top:4px;}
+
+.btn{width:100%;min-height:52px;border-radius:12px;border:none;background:var(--indigo);color:var(--on-indigo);font-family:var(--display);font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn:active{transform:translateY(1px);}
+.btn--ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);min-height:48px;font-size:14px;}
+.btn--quiet{background:none;border:none;color:var(--muted);min-height:44px;font-size:13.5px;}
+.btn--small{width:auto;min-height:40px;padding:0 16px;font-size:12.5px;border-radius:10px;}
+
+.rows{display:flex;flex-direction:column;}
+.row{display:flex;align-items:center;gap:12px;padding:10px 8px;}
+.row + .row{border-top:1px solid var(--line-soft);}
+.row--me{background:var(--indigo-soft);border-radius:10px;border-top:none !important;}
+.rank{width:16px;font-family:var(--display);font-weight:700;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;}
+.avatar{width:28px;height:28px;border-radius:50%;flex:none;background:var(--line-soft);color:var(--muted);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:11.5px;overflow:hidden;}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.avatar--me{background:var(--indigo);color:var(--on-indigo);}
+.row-name{flex:1;font-size:14px;font-weight:600;}
+.row-xp{font-family:var(--display);font-weight:700;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;}
+.row--me .rank,.row--me .row-name,.row--me .row-xp{color:var(--indigo-ink);font-weight:700;}
+
+.badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 10px;}
+.badge{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.badge-ico{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--ground);color:var(--faint);}
+.badge--on .badge-ico{background:var(--mint-soft);color:var(--mint-ink);}
+.badge span{font-size:10.5px;font-weight:600;text-align:center;line-height:1.3;color:var(--muted);}
+.badge--on span{color:var(--ink);}
+
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 12px;display:flex;flex-direction:column;gap:4px;}
+.stat b{font-family:var(--display);font-weight:700;font-size:20px;font-variant-numeric:tabular-nums;}
+.stat span{font-size:11.5px;color:var(--muted);line-height:1.3;}
+
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;}
+.cal-head{text-align:center;font-size:10.5px;font-weight:600;color:var(--muted);}
+.cell{height:30px;border-radius:8px;background:var(--line-soft);border:1.5px solid var(--line-soft);}
+.cell--done{background:var(--mint);border-color:var(--mint);}
+.cell--today{background:var(--card);border-color:var(--indigo-ink);}
+.cell--future{background:transparent;border-color:var(--line);border-style:dashed;}
+.legend{display:flex;align-items:center;gap:16px;border-top:1px solid var(--line);padding-top:12px;margin-top:12px;flex-wrap:wrap;}
+.legend span{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);}
+.chip{width:10px;height:10px;border-radius:3px;background:var(--mint);}
+.chip--miss{background:var(--line-soft);}
+.chip--today{background:var(--card);border:1.5px solid var(--indigo-ink);}
+
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));}
+.tabbar-inner{max-width:430px;margin:0 auto;width:100%;display:flex;justify-content:space-around;}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 10px;font-size:10.5px;font-weight:600;}
+.tab.is-on{color:var(--indigo-ink);font-weight:700;}
+
+.topbar{display:flex;align-items:center;gap:14px;padding:16px 0;}
+.iconbtn{width:32px;height:32px;border-radius:8px;border:none;flex:none;background:var(--ground);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.bar{flex:1;height:4px;border-radius:2px;background:var(--line-soft);overflow:hidden;}
+.bar > i{display:block;height:100%;background:var(--indigo);border-radius:2px;transition:width .3s ease;}
+.h1{font-family:var(--display);font-weight:700;font-size:28px;line-height:1.2;letter-spacing:-.02em;text-wrap:balance;}
+.h2{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.25;letter-spacing:-.02em;text-wrap:balance;}
+.h3{font-family:var(--display);font-weight:700;font-size:15px;}
+.lead{font-size:15px;line-height:1.55;color:var(--muted);}
+.small{font-size:13px;line-height:1.5;color:var(--muted);}
+.center{text-align:center;display:flex;flex-direction:column;align-items:center;}
+.grow{flex:1;}
+.foot{display:flex;flex-direction:column;gap:10px;padding-block:20px 32px;}
+.feature{display:flex;align-items:flex-start;gap:14px;}
+.feature-ico{width:36px;height:36px;border-radius:10px;flex:none;background:var(--indigo-soft);color:var(--indigo-ink);display:flex;align-items:center;justify-content:center;}
+.field{display:flex;flex-direction:column;gap:7px;}
+.field label{font-size:12.5px;font-weight:700;color:var(--muted);}
+.field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:15px;color:var(--ink);background:var(--card);}
+.field input{min-height:52px;padding-block:0;}
+.field textarea{resize:none;line-height:1.5;font-size:14.5px;}
+.field input:focus,.field textarea:focus{border-color:var(--indigo-ink);outline:none;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chipbtn{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;}
+.chipbtn.is-on{border-color:var(--indigo-ink);background:var(--indigo-soft);color:var(--indigo-ink);font-weight:700;}
+.choice{display:flex;align-items:center;gap:14px;text-align:left;width:100%;padding:18px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;}
+.choice:hover{border-color:var(--indigo-ink);}
+.choice-ico{width:40px;height:40px;border-radius:10px;flex:none;background:var(--ground);color:var(--muted);display:flex;align-items:center;justify-content:center;}
+.choice b{display:block;font-size:15px;font-weight:700;}
+.choice em{display:block;font-style:normal;font-size:13px;color:var(--muted);margin-top:3px;line-height:1.45;}
+.hero-ico{width:80px;height:80px;border-radius:50%;background:var(--mint-soft);color:var(--mint-ink);display:flex;align-items:center;justify-content:center;}
+.hero-ico--xp{background:var(--yellow-soft);color:var(--yellow-ink);}
+.pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 16px;background:var(--yellow-soft);color:var(--yellow-ink);font-family:var(--display);font-weight:700;font-size:14px;}
+.ladder{border:1px solid var(--line);border-radius:16px;padding:6px 16px;background:var(--card);}
+.step{display:flex;align-items:center;gap:14px;padding:12px 0;}
+.step + .step{border-top:1px solid var(--line-soft);}
+.step i{width:10px;height:10px;border-radius:50%;background:var(--faint);flex:none;display:block;}
+.step.is-done i{background:var(--indigo-ink);}
+.step.is-now i{background:var(--indigo-ink);box-shadow:0 0 0 4px var(--indigo-soft);}
+.step b{flex:1;font-size:14px;font-weight:600;}
+.step.is-now b{color:var(--indigo-ink);font-weight:700;}
+.step span{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
+.note{display:flex;align-items:flex-start;gap:12px;padding:16px;border-radius:12px;background:var(--ground);}
+.note span{flex:1;font-size:13px;line-height:1.5;color:var(--muted);}
+.split{display:flex;align-items:center;gap:14px;}
+.demo{display:flex;flex-direction:column;gap:8px;}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom, 0px));z-index:40;background:var(--ink);color:var(--ground);font-family:var(--display);font-weight:700;font-size:13.5px;padding:12px 20px;border-radius:999px;animation:rise .25s ease;}
+@keyframes rise{from{opacity:0;transform:translate(-50%,10px);}to{opacity:1;transform:translate(-50%,0);}}
+</style>
+</head>
+<body>
+<div class="shell" id="app"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var ICON = {
+    flame:'<path d="M12 2c1 3-2 4-2 7a2 2 0 0 0 4 0c2 2 3 4 3 6a5 5 0 0 1-10 0c0-4 3-5 3-9 1 1 2 2 2 4z"/>',
+    star:'<path d="M12 2l2.6 6.6L21 9.3l-5 4.6 1.4 6.9L12 17.6l-5.4 3.2L8 13.9 3 9.3l6.4-.7z"/>',
+    check:'<polyline points="20 6 9 17 4 12"/>',
+    cross:'<path d="M6 6l12 12M18 6L6 18"/>',
+    back:'<path d="M14.5 5L8 12l6.5 7"/>',
+    lock:'<rect x="4.5" y="11" width="15" height="9" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/>',
+    bang:'<path d="M12 8v5M12 16.5v.01"/>',
+    home:'<path d="M4 10.5L12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z"/>',
+    chart:'<path d="M5 20V10M12 20V4M19 20v-7"/>',
+    users:'<circle cx="9" cy="8" r="3"/><path d="M2.5 20c0-3.4 2.9-5.8 6.5-5.8s6.5 2.4 6.5 5.8"/><circle cx="17.5" cy="8.5" r="2.4"/><path d="M17 13c2.4.4 4.3 2.3 4.8 5.4"/>',
+    person:'<circle cx="12" cy="8" r="3.4"/><path d="M4.5 20c0-3.6 3.4-6 7.5-6s7.5 2.4 7.5 6"/>',
+    clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 1.8"/>',
+    target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/>',
+    shield:'<path d="M12 2.5l7.5 2.8v5.6c0 4.7-3.3 8-7.5 10.3-4.2-2.3-7.5-5.6-7.5-10.3V5.3z"/>',
+    bulb:'<path d="M9 18h6M10 21.5h4M12 2.5a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5a6 6 0 0 0-4-10.5z"/>',
+    code:'<path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/>',
+    info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 16.5v-4.5M12 8.3v.01"/>',
+    cloud:'<path d="M7 18.5h10a3.5 3.5 0 0 0 .3-7 5.5 5.5 0 0 0-10.6-1.2A3.8 3.8 0 0 0 7 18.5z"/>',
+    phone:'<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>'
+  };
+
+  function svg(name, size, weight){
+    return '<svg width="'+(size||18)+'" height="'+(size||18)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(weight||1.75)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[name]+'</svg>';
+  }
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; });
+  }
+
+  /* ---------- content ---------- */
+
+  var LEVELS = [
+    {min:0, name:"AI-nieuwsgierige"},
+    {min:60, name:"AI-verkenner"},
+    {min:140, name:"AI-praktijkspecialist"},
+    {min:240, name:"AI-koploper"},
+    {min:360, name:"AI-expert"}
+  ];
+
+  var HARD = [
+    {q:"Volgens de EU AI Act worden AI-systemen ingedeeld naar risico. Welke indeling klopt?",
+     o:["Alleen legaal en illegaal","Onaanvaardbaar, hoog, beperkt en minimaal risico","Klein, middelgroot en groot bedrijf","Nederlandse versus buitenlandse systemen"],c:1,
+     e:"De EU AI Act kent vier risicocategorieen. Hoe hoger het risico, hoe strenger de eisen aan documentatie, transparantie en menselijk toezicht.",
+     course:"A24 · AI Literacy & Governance"},
+    {q:"AI Fundamentals legt uit hoe een groot taalmodel werkt. Wat doet een LLM eigenlijk?",
+     o:["Het onthoudt de trainingsdata woord voor woord","Het voorspelt het meest waarschijnlijke volgende woord op basis van patronen","Het redeneert met bewustzijn, zoals een mens","Het zoekt live op internet naar het juiste antwoord"],c:1,
+     e:"Een LLM is een patroonvoorspeller. Dat verklaart ook waarom het soms overtuigend maar onjuist antwoordt.",
+     course:"A03 · AI Fundamentals"},
+    {q:"Fundamentals of a data stack behandelt ETL versus ELT. Wat is het verschil?",
+     o:["Bij ETL transformeer je data voordat die het warehouse ingaat, bij ELT pas daarna","ETL en ELT zijn twee namen voor hetzelfde proces","ELT werkt alleen met Excel-bestanden","ETL bestaat niet meer sinds dbt"],c:0,
+     e:"ETL transformeert voor het laden. ELT laadt eerst ruwe data en transformeert daarna, vaak met dbt. Moderne stacks kiezen vaker voor ELT.",
+     course:"A15 · Fundamentals of a data stack"},
+    {q:"In de cursus Langchain bouw je toepassingen met RAG. Waar staat RAG voor?",
+     o:["Rapid Application Generation","Retrieval-Augmented Generation","Random Access Grid","Reinforced Agent Guidance"],c:1,
+     e:"RAG haalt relevante informatie op uit een externe bron en geeft die mee aan het model, zodat het antwoord gegrond is in echte data.",
+     course:"A27 · Langchain"},
+    {q:"Machine Learning with Python behandelt overfitting. Wat houdt dat in?",
+     o:["Het model is te simpel en mist patronen","Het model leert de trainingsdata bijna uit het hoofd en presteert slecht op nieuwe data","Het model traint te snel om nuttig te zijn","Het model gebruikt te weinig werkgeheugen"],c:1,
+     e:"Een overfit model heeft de trainingsdata te precies gememoriseerd, inclusief ruis, en generaliseert slecht naar nieuwe data.",
+     course:"A05 · Machine Learning with Python"},
+    {q:"Deep Learning with Python behandelt Convolutional Neural Networks. Waar zijn die sterk in?",
+     o:["Tekstvertaling tussen talen","Beeldherkenning en beeldclassificatie","Het versturen van e-mail","Het comprimeren van bestanden"],c:1,
+     e:"CNN's herkennen randen, vormen en texturen via filters en pooling, waardoor ze uitblinken in computer vision.",
+     course:"A16 · Deep Learning with Python"},
+    {q:"Microsoft Copilot for Professionals leert het GCSE-promptframework. Waar staat de C voor?",
+     o:["Creativity","Context","Coding","Compliance"],c:1,
+     e:"GCSE staat voor Goal, Context, Source, Expectations. Context grondt de prompt in jouw organisatie.",
+     course:"A33 · Microsoft Copilot for Professionals"},
+    {q:"Building Your Data Pipeline bereidt je voor op een Microsoft-certificaat. Welk?",
+     o:["DP-900 Azure Data Fundamentals","AZ-900 Azure Fundamentals","PL-300 Power BI Data Analyst","AI-900 Azure AI Fundamentals"],c:0,
+     e:"DP-900 toetst basiskennis van cloud data-concepten en Azure-dataservices, precies de stof van deze cursus.",
+     course:"A14 · Building Your Data Pipeline"},
+    {q:"Programming with AI leert je van vibe coding naar context engineering te gaan. Wat is het verschil?",
+     o:["Vibe coding schrijft geen code, context engineering wel","Bij vibe coding leun je op losse prompts, bij context engineering bouw je vaste context op zoals een CLAUDE.md","Het zijn twee namen voor dezelfde werkwijze","Context engineering werkt zonder AI-model"],c:1,
+     e:"Context engineering geeft de tool een vast fundament in plaats van bij elke taak te hopen op een goede prompt. Dat maakt het resultaat voorspelbaar.",
+     course:"A30 · Programming with AI (Claude Code)"},
+    {q:"Data storytelling leert je een dataverhaal opbouwen. Wat is de aanbevolen volgorde?",
+     o:["Actie, dan context en inzicht","Context, inzicht, actie","Alleen cijfers tonen zonder verhaallijn","Eerst de grafiek, nooit een toelichting"],c:1,
+     e:"Een sterk dataverhaal schetst eerst de context, brengt dan het inzicht en eindigt met de actie die daaruit volgt.",
+     course:"A13 · Data storytelling"}
+  ];
+
+  var SOFT = [
+    {q:"Een AI-tool concludeert op basis van drie maanden data dat een nieuwe marketingaanpak beter werkt. Wat is de meest kritische vervolgvraag?",
+     o:["Is de dataset groot en representatief genoeg voor deze conclusie","Ziet de grafiek er professioneel uit","Hoeveel tijd had de AI nodig","Is de tekst goed geschreven"],c:0,
+     e:"Een overtuigende conclusie is niet hetzelfde als een onderbouwde conclusie. Kritisch denken begint bij de vraag of de data het antwoord kan dragen.",
+     skill:"Kritisch denken"},
+    {q:"Je project verandert halverwege van scope omdat de klant nieuwe eisen stelt. Wat is de meest adaptieve reactie?",
+     o:["Vasthouden aan het oorspronkelijke plan","Kort de impact in kaart brengen en samen herprioriteren","De klant negeren tot het project af is","Alles opnieuw beginnen"],c:1,
+     e:"Adaptief werken betekent niet meebewegen met alles, maar de impact expliciet maken en daarna bewust kiezen.",
+     skill:"Adaptief vermogen"},
+    {q:"Halverwege de dag komt er een spoedklus bij terwijl je planning al vol zat. Wat doe je eerst?",
+     o:["Alles laten vallen voor de spoedklus","Kort checken wat kan wachten en dan bewust herprioriteren","De spoedklus negeren","Beide taken half doen"],c:1,
+     e:"Goed prioriteren onder druk begint met een korte check van wat echt kan wachten, in plaats van reflexmatig te schakelen.",
+     skill:"Prioriteren"},
+    {q:"Een teamlid durft in een meeting geen kritische vraag te stellen. Wat helpt het meest?",
+     o:["Wachten tot iemand toch iets zegt","Zelf als eerste een onzekerheid of fout benoemen","De persoon er publiekelijk op aanspreken","Meetings korter maken"],c:1,
+     e:"Psychologische veiligheid ontstaat vaak doordat iemand met status als eerste kwetsbaarheid toont. Dat maakt het voor anderen makkelijker.",
+     skill:"Psychologische veiligheid"},
+    {q:"Je moet een technisch resultaat uitleggen aan een niet-technische opdrachtgever. Waar begin je?",
+     o:["Bij de gebruikte modellen en parameters","Bij wat het voor hun werk betekent","Bij de code","Bij de beperkingen van de dataset"],c:1,
+     e:"Begin bij de betekenis voor de ontvanger. Techniek en nuance volgen daarna, anders haakt je publiek af voordat de boodschap landt.",
+     skill:"Communicatie"}
+  ];
+
+  var DOMAINS = {
+    marketing:{name:"Marketing", match:["marketing","brand","content","social","communicatie"], qs:[
+      {q:"Je marketingteam wil AI social captions laten schrijven op basis van eerdere posts. Wat check je eerst?",
+       o:["Of de teksten kloppen met de merkstijl en geen verzonnen claims bevatten","Of het model snel genoeg is","Of de tool gratis is","Of concurrenten dezelfde tool gebruiken"],c:0,
+       e:"Bij contentgeneratie check je eerst feitelijke juistheid en merkconsistentie. Snelheid en kosten komen daarna."},
+      {q:"Een AI-tool stelt een nieuwe campagnenaam voor. Wat doe je voordat je die gebruikt?",
+       o:["Checken of de naam vrij is en nergens al gebruikt wordt","Meteen live zetten","Alleen collega's om een reactie vragen","Kijken of het goed klinkt in het Engels"],c:0,
+       e:"Namen en claims uit AI verifieer je altijd zelf, ook juridisch."}
+    ]},
+    sales:{name:"Sales", match:["sales","verkoop","account","commercieel"], qs:[
+      {q:"Je laat AI follow-up mails opstellen voor leads. Waar ben je het meest alert op?",
+       o:["Dat de mail klopt met wat er echt besproken is","Dat de mail zo lang mogelijk is","Dat iedereen dezelfde mail krijgt","Dat het onderwerp opvalt"],c:0,
+       e:"Gegenereerde follow-ups moeten kloppen met het echte gesprek, anders verlies je geloofwaardigheid bij de klant."},
+      {q:"AI maakt een samenvatting na een salescall. Waar let je op?",
+       o:["Of toezeggingen en actiepunten correct zijn overgenomen","Of de samenvatting lang genoeg is","Of het in dezelfde taal is","Of de klant hem leuk vindt"],c:0,
+       e:"Verkeerd overgenomen toezeggingen leiden tot problemen. Controleer die altijd zelf."}
+    ]},
+    hr:{name:"HR", match:["hr","recruit","people","talent","personeel"], qs:[
+      {q:"Je overweegt AI in te zetten om cv's voor te selecteren. Wat is het grootste risico?",
+       o:["Onbedoelde bias tegen bepaalde groepen kandidaten","Dat het proces te snel gaat","Dat kandidaten het niet leuk vinden","Dat de tool te duur is"],c:0,
+       e:"AI-modellen nemen bias uit historische data over. Dat is het grootste risico bij geautomatiseerde selectie."},
+      {q:"Je gebruikt AI om vacatureteksten te schrijven. Wat check je voor publicatie?",
+       o:["Of de tekst geen uitsluitende of discriminerende taal bevat","Of de tekst kort genoeg is","Of het enthousiast klinkt","Of concurrenten hetzelfde doen"],c:0,
+       e:"Vacatureteksten moeten inclusief zijn. AI kan onbedoeld uitsluitende taal gebruiken."}
+    ]},
+    finance:{name:"Finance", match:["finance","controller","accountant","boekhoud","financ"], qs:[
+      {q:"Je wilt AI facturen laten controleren. Waar let je het eerst op?",
+       o:["Of de uitkomsten controleerbaar en herleidbaar zijn","Of het sneller is dan handmatig","Of het er professioneel uitziet","Of de leverancier bekend is"],c:0,
+       e:"Bij financiele controles is herleidbaarheid cruciaal. Je moet kunnen aantonen hoe een uitkomst tot stand kwam."},
+      {q:"AI stelt een forecast op voor het komende kwartaal. Wat doe je voordat je die deelt?",
+       o:["De aannames en databronnen erachter controleren","Meteen delen, modellen zijn objectief","Alleen de eindconclusie lezen","Kijken of het cijfer hoger is dan vorig kwartaal"],c:0,
+       e:"Een forecast is zo goed als de aannames erachter. Die controleer je altijd zelf."}
+    ]},
+    tech:{name:"IT en development", match:["developer","engineer","software","data","it","tech"], qs:[
+      {q:"Je gebruikt AI om code te genereren voor een productiesysteem. Wat doe je sowieso?",
+       o:["Code reviewen en testen zoals bij elke andere bijdrage","Direct deployen","Alleen de output lezen","De AI vragen of het klopt"],c:0,
+       e:"AI-gegenereerde code doorloopt dezelfde review en teststappen als menselijke code. Geen uitzondering."},
+      {q:"AI stelt voor een externe library te gebruiken. Wat check je eerst?",
+       o:["Of de library actief onderhouden wordt en geen bekende kwetsbaarheden heeft","Of de naam professioneel klinkt","Of het de nieuwste is","Of anderen hem genoemd hebben"],c:0,
+       e:"Bij elke afhankelijkheid check je onderhoud en kwetsbaarheden, ook als AI het voorstelt."}
+    ]}
+  };
+
+  var TASKS = [
+    {t:"Automatiseer een terugkerende taak uit je werk met Claude Code en laat het resultaat aan een collega zien.",
+     tip:"Kies iets kleins en concreets: een script, een check, een rapportje. Vertel er kort bij wat het je oplevert.",
+     course:"A30 · Programming with AI (Claude Code)"},
+    {t:"Gebruik Copilot deze cyclus voor een echte taak in Word, Excel of Outlook en deel met een collega wat het opleverde.",
+     tip:"Denk aan een vergaderverslag, een analyse of een concepttekst.",
+     course:"A33 · Microsoft Copilot for Professionals"},
+    {t:"Leg een collega in vijf minuten uit wat een datapipeline is en waarom die nuttig is voor jullie werk.",
+     tip:"Gebruik een voorbeeld uit je eigen team en zo min mogelijk jargon.",
+     course:"A14 · Building Your Data Pipeline"},
+    {t:"Informeer twee collega's over een AI-toepassing die jij deze cyclus hebt uitgeprobeerd.",
+     tip:"Vertel kort wat het oplevert en waar ze op moeten letten.",
+     course:"A31 · Working with AI"}
+  ];
+
+  var BADGES = [
+    {id:"s3", name:"3 op rij", icon:"flame", test:function(s){return s.bestStreak>=3;}},
+    {id:"crit", name:"Kritische blik", icon:"shield", test:function(s){return s.softCorrect>=3;}},
+    {id:"s7", name:"7 op rij", icon:"flame", test:function(s){return s.bestStreak>=7;}},
+    {id:"task", name:"Challenge ingeleverd", icon:"target", test:function(s){return s.tasksDone>=1;}},
+    {id:"s14", name:"14 op rij", icon:"flame", test:function(s){return s.bestStreak>=14;}},
+    {id:"x250", name:"250 XP", icon:"star", test:function(s){return s.xp>=250;}}
+  ];
+
+  var DAYS = ["ma","di","wo","do","vr","za","zo"];
+  var KEY = "skillstreak_v3";
+  var WEEK_GOAL = 10;
+
+  /* ---------- dates ---------- */
+
+  function dayKey(d){
+    var y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate();
+    return y + "-" + (m<10?"0":"") + m + "-" + (day<10?"0":"") + day;
+  }
+  function today(){ return dayKey(new Date()); }
+  function shift(key, delta){
+    var p = key.split("-");
+    var d = new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+    d.setDate(d.getDate() + delta);
+    return dayKey(d);
+  }
+  function mondayOf(key){
+    var p = key.split("-");
+    var d = new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+    var wd = (d.getDay() + 6) % 7;
+    d.setDate(d.getDate() - wd);
+    return dayKey(d);
+  }
+  function computeStreak(days){
+    if(!days || !days.length) return 0;
+    var set = {};
+    for(var i=0;i<days.length;i++) set[days[i]] = true;
+    var cursor = today();
+    if(!set[cursor]) cursor = shift(cursor, -1);
+    var n = 0;
+    while(set[cursor]){ n++; cursor = shift(cursor, -1); }
+    return n;
+  }
+
+  /* ---------- state ---------- */
+
+  function fresh(){
+    return {
+      step:"welcome", tab:"vandaag", view:null,
+      naam:"", cursus:"A30 · Programming with AI (Claude Code)",
+      keuze:[], keuzeIndex:0, advies:null,
+      domain:null, domainInput:"",
+      intakeIndex:0, intakeCorrect:0, intakePick:null,
+      xp:0, bestStreak:0,
+      days:[], lastDay:null,
+      qIndex:0, answered:0, correct:0, softCorrect:0,
+      practiceCount:0, bonusDay:null, practiceActive:false,
+      weekAnswered:0, weekIndex:0, tasksDone:0, reflection:"",
+      pick:null, lastGain:0, lastRight:null
+    };
+  }
+
+  var state = fresh();
+  var Net = {db:null, user:null, uid:null, canWrite:null, mode:"local", board:[], unsub:null, queued:false, writing:false};
+  var toastTimer = null;
+
+  function streak(){ return computeStreak(state.days); }
+
+  /* ---------- storage ---------- */
+
+  var PERSIST = ["naam","cursus","domain","xp","bestStreak","days","lastDay","qIndex","answered","correct","softCorrect","practiceCount","bonusDay","weekAnswered","weekIndex","tasksDone","reflection","step"];
+
+  function snapshot(){
+    var out = {};
+    for(var i=0;i<PERSIST.length;i++) out[PERSIST[i]] = state[PERSIST[i]];
+    out.streak = streak();
+    out.updatedAt = new Date().toISOString();
+    return out;
+  }
+  function apply(data){
+    if(!data) return;
+    for(var i=0;i<PERSIST.length;i++){
+      if(data[PERSIST[i]] !== undefined) state[PERSIST[i]] = data[PERSIST[i]];
+    }
+    if(!Array.isArray(state.days)) state.days = [];
+  }
+
+  function saveLocal(){
+    try{ localStorage.setItem(KEY, JSON.stringify(snapshot())); }catch(e){}
+  }
+  function loadLocal(){
+    try{
+      var raw = localStorage.getItem(KEY);
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return null;
+  }
+
+  function save(){
+    saveLocal();
+    if(Net.db && Net.uid){
+      if(Net.writing){ Net.queued = true; return; }
+      Net.writing = true;
+      var body = snapshot();
+      Net.db.doc("players/" + Net.uid).set(body).then(function(){
+        Net.writing = false;
+        if(Net.queued){ Net.queued = false; save(); }
+      }, function(err){
+        Net.writing = false;
+        Net.queued = false;
+        if(err && err.code === "invalid_argument"){
+          Net.mode = "local";
+          toast("Voortgang wordt alleen op dit apparaat bewaard");
+        }
+      });
+    }
+    try{
+      if(window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(snapshot());
+    }catch(e){}
+  }
+
+  function toast(text){
+    var old = document.querySelector(".toast");
+    if(old) old.remove();
+    var el = document.createElement("div");
+    el.className = "toast";
+    el.textContent = text;
+    document.body.appendChild(el);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.remove(); }, 2400);
+  }
+
+  /* ---------- questions ---------- */
+
+  var MIX = (function(){
+    var mix = [];
+    for(var i=0;i<Math.max(HARD.length, SOFT.length);i++){
+      if(HARD[i]) mix.push(Object.assign({type:"hard"}, HARD[i]));
+      if(SOFT[i]) mix.push(Object.assign({type:"soft"}, SOFT[i]));
+    }
+    return mix;
+  })();
+
+  function questionAt(i){
+    var d = state.domain ? DOMAINS[state.domain] : null;
+    if(d && i % 3 === 2){
+      var dq = d.qs[Math.floor(i/3) % d.qs.length];
+      return Object.assign({type:"domain", domainName:d.name}, dq);
+    }
+    return MIX[i % MIX.length];
+  }
+  function detectDomain(text){
+    var low = (text||"").toLowerCase();
+    for(var k in DOMAINS){
+      var m = DOMAINS[k].match;
+      for(var i=0;i<m.length;i++){ if(low.indexOf(m[i]) >= 0) return k; }
+    }
+    return null;
+  }
+  function levelFor(xp){
+    var cur = LEVELS[0], next = null, idx = 0;
+    for(var i=0;i<LEVELS.length;i++){ if(xp>=LEVELS[i].min){ cur = LEVELS[i]; idx = i; } }
+    if(idx+1 < LEVELS.length) next = LEVELS[idx+1];
+    return {cur:cur, next:next, idx:idx};
+  }
+  function badgeState(){
+    var s = {bestStreak:Math.max(state.bestStreak, streak()), softCorrect:state.softCorrect, tasksDone:state.tasksDone, xp:state.xp};
+    return BADGES.map(function(b){ return {b:b, on:!!b.test(s)}; });
+  }
+  function answeredToday(){
+    return state.days.indexOf(today()) >= 0;
+  }
+
+  /* ---------- pieces ---------- */
+
+  function appbar(){
+    return '<div class="appbar">'
+      + '<div class="brand"><span class="mark">'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>'
+      + '</span><span class="brand-name">Skill Streak</span></div>'
+      + '<div class="counts">'
+        + '<span class="count count--streak">'+svg("flame",14)+'<span>'+streak()+'</span></span>'
+        + '<span class="count count--xp">'+svg("star",14)+'<span>'+state.xp+'</span></span>'
+      + '</div>'
+    + '</div>';
+  }
+
+  function tabbar(){
+    function tab(id, icon, label){
+      return '<button class="tab'+(state.tab===id?" is-on":"")+'" data-act="tab" data-v="'+id+'" type="button">'+svg(icon,20)+'<span>'+label+'</span></button>';
+    }
+    return '<nav class="tabbar"><div class="tabbar-inner">'
+      + tab("vandaag","home","Vandaag")
+      + tab("voortgang","chart","Voortgang")
+      + tab("cohort","users","Cohort")
+      + tab("profiel","person","Profiel")
+    + '</div></nav>';
+  }
+
+  function weekStrip(){
+    var t = today(), start = mondayOf(t), out = '<div class="week">';
+    for(var d=0; d<7; d++){
+      var key = shift(start, d);
+      var done = state.days.indexOf(key) >= 0;
+      var isToday = key === t;
+      var future = key > t;
+      var cls = "dot", inner = "";
+      if(done){ cls += " dot--done"; inner = svg("check",14,2.5); }
+      else if(isToday){ cls += " dot--today"; inner = "<i></i>"; }
+      else if(future){ cls += " dot--future"; }
+      else { cls += " dot--miss"; inner = "<i></i>"; }
+      out += '<div class="day'+(isToday?" is-today":"")+'"><div class="'+cls+'">'+inner+'</div><span>'+DAYS[d]+'</span></div>';
+    }
+    return out + '</div>';
+  }
+
+  function questionCard(q, inline){
+    var tag, meta;
+    if(q.type === "domain"){ tag = '<span class="tag tag--mint">Toepassing</span>'; meta = esc(q.domainName); }
+    else if(q.type === "soft"){ tag = '<span class="tag tag--soft">Denktest</span>'; meta = "Softskill · " + esc(q.skill); }
+    else { tag = '<span class="tag">Kennisherhaling</span>'; meta = esc(q.course); }
+
+    var out = '<div class="tagrow">'+tag+'<span class="meta">'+meta+'</span></div>'
+      + '<div class="q">'+esc(q.q)+'</div><div class="opts">';
+
+    var picked = state.pick;
+    for(var i=0;i<q.o.length;i++){
+      var cls = "opt", mark = "", dis = "";
+      if(picked !== null){
+        dis = " disabled";
+        if(i === q.c){ cls += " opt--right"; mark = '<span class="opt-mark opt-mark--right">'+svg("check",13,3)+'</span>'; }
+        else if(i === picked){ cls += " opt--wrong"; mark = '<span class="opt-mark opt-mark--wrong">'+svg("cross",13,3)+'</span>'; }
+        else { cls += " opt--dim"; }
+      }
+      out += '<button class="'+cls+'" type="button" data-act="answer" data-v="'+i+'"'+dis+'><span style="flex:1">'+esc(q.o[i])+'</span>'+mark+'</button>';
+    }
+    out += '</div>';
+
+    if(picked !== null){
+      var good = state.lastRight;
+      out += '<div class="fb '+(good?"fb--good":"fb--bad")+'">'
+        + '<span class="fb-icon">'+svg(good?"check":"bang",15,good?3:2.2)+'</span>'
+        + '<div style="flex:1">'
+          + '<div class="fb-row"><span class="fb-title">'+(good ? (q.type==="soft"?"Scherp gezien":"Goed beantwoord") : "Net niet")+'</span>'
+          + '<span class="fb-xp">+'+state.lastGain+' XP</span></div>'
+          + '<div class="fb-body">'+esc(q.e)+'</div>'
+        + '</div></div>'
+      + '<button class="btn" type="button" data-act="next">Doorgaan</button>';
+    } else if(inline && !answeredToday()){
+      out += '<div class="small">Je eerste vraag van vandaag telt voor je streak.</div>';
+    }
+    return out;
+  }
+
+  /* ---------- views ---------- */
+
+  function viewVandaag(){
+    var lv = levelFor(state.xp);
+    var into = state.xp - lv.cur.min;
+    var span = lv.next ? (lv.next.min - lv.cur.min) : Math.max(into,1);
+    var pct = lv.next ? Math.round(into/span*100) : 100;
+    var q = questionAt(state.qIndex);
+    var task = TASKS[state.weekIndex % TASKS.length];
+    var unlocked = state.weekAnswered >= WEEK_GOAL;
+    var st = streak();
+
+    var out = '<div class="stack">';
+
+    out += '<div class="level">'
+      + '<div class="level-label">Niveau '+(lv.idx+1)+' van '+LEVELS.length+'</div>'
+      + '<div class="level-name">'+esc(lv.cur.name)+'</div>'
+      + '<div class="track"><i style="width:'+pct+'%"></i></div>'
+      + '<div class="level-foot"><span>'+into+' / '+span+' XP</span><span>'
+      + (lv.next ? "Nog "+(lv.next.min-state.xp)+" XP tot "+esc(lv.next.name) : "Hoogste niveau")
+      + '</span></div></div>';
+
+    out += '<div class="group"><div class="label">Deze week</div>'
+      + '<div class="card card--tight">'+weekStrip()
+      + '<div class="hint">'+(answeredToday()
+          ? (st + (st===1?" dag":" dagen") + " op rij. Vandaag staat genoteerd.")
+          : (st>0 ? st + (st===1?" dag":" dagen") + " op rij. Beantwoord je vraag en je staat op " + (st+1) + "."
+                  : "Nog geen streak. Je eerste vraag zet hem op 1."))
+      + '</div></div></div>';
+
+    out += '<div class="group">'
+      + '<div class="label-row"><span class="label">Vandaag</span><span class="meta">vraag '+Math.min(state.weekAnswered+1, WEEK_GOAL)+' van '+WEEK_GOAL+'</span></div>';
+
+    if(answeredToday() && state.pick === null && !state.practiceActive){
+      out += '<div class="card" style="display:flex;flex-direction:column;gap:16px;">'
+        + '<div class="split"><span class="badge-ico" style="background:var(--mint-soft);color:var(--mint-ink)">'+svg("check",20,2.2)+'</span>'
+        + '<div style="flex:1"><div class="h3">Vandaag afgevinkt</div>'
+        + '<div class="small">Je streak staat op '+st+'. Doorgaan mag altijd.</div></div></div>'
+        + '<button class="btn btn--ghost" type="button" data-act="practice">Nog een vraag doen</button></div>';
+    } else {
+      out += '<div class="card" style="display:flex;flex-direction:column;gap:16px;">'+questionCard(q, true)+'</div>';
+    }
+    out += '</div>';
+
+    out += '<div class="group"><div class="label">Challenge van deze cyclus</div>';
+    if(unlocked){
+      out += '<button class="card" type="button" data-act="openTask" style="display:flex;flex-direction:column;gap:14px;text-align:left;width:100%;cursor:pointer;">'
+        + '<div class="split"><span class="choice-ico" style="background:var(--mint-soft);color:var(--mint-ink)">'+svg("target",20)+'</span>'
+        + '<div style="flex:1"><div class="h3">Challenge staat open</div>'
+        + '<div class="small">'+esc(task.course)+'</div></div></div>'
+        + '<div class="small" style="color:var(--ink)">'+esc(task.t)+'</div></button>';
+    } else {
+      var rest = WEEK_GOAL - state.weekAnswered;
+      out += '<div class="card card--tight" style="display:flex;flex-direction:column;gap:14px;">'
+        + '<div class="split"><span class="choice-ico">'+svg("lock",18)+'</span>'
+        + '<div style="flex:1"><div class="h3">Nog '+rest+' '+(rest===1?"vraag":"vragen")+' te gaan</div>'
+        + '<div class="small">Daarna opent de praktijkopdracht bij '+esc(task.course)+'.</div></div></div>'
+        + '<div><div class="track track--plain"><i style="width:'+Math.round(state.weekAnswered/WEEK_GOAL*100)+'%"></i></div>'
+        + '<div class="meta" style="margin-top:8px">'+state.weekAnswered+' van '+WEEK_GOAL+' vragen</div></div></div>';
+    }
+    out += '</div>';
+
+    var bs = badgeState(), earned = bs.filter(function(x){return x.on;}).length;
+    out += '<div class="group">'
+      + '<div class="label-row"><span class="label">Badges</span><span class="meta">'+earned+' van '+bs.length+'</span></div>'
+      + '<div class="card card--tight"><div class="badges">'
+      + bs.map(function(x){
+          return '<div class="badge'+(x.on?" badge--on":"")+'"><span class="badge-ico">'+svg(x.on?x.b.icon:"lock",18)+'</span><span>'+esc(x.b.name)+'</span></div>';
+        }).join("")
+      + '</div></div></div>';
+
+    return out + '</div>';
+  }
+
+  function viewVoortgang(){
+    var lv = levelFor(state.xp);
+    var into = state.xp - lv.cur.min;
+    var span = lv.next ? (lv.next.min - lv.cur.min) : Math.max(into,1);
+    var pct = lv.next ? Math.round(into/span*100) : 100;
+    var acc = state.answered ? Math.round(state.correct/state.answered*100) : 0;
+    var st = streak();
+
+    var t = today(), start = shift(mondayOf(t), -21), cells = "", done = 0;
+    for(var i=0;i<28;i++){
+      var key = shift(start, i);
+      var cls = "cell";
+      if(state.days.indexOf(key) >= 0){ cls += " cell--done"; done++; }
+      else if(key === t){ cls += " cell--today"; }
+      else if(key > t){ cls += " cell--future"; }
+      cells += '<div class="'+cls+'"></div>';
+    }
+
+    var out = '<div class="stack">';
+
+    out += '<div class="card card--tight split">'
+      + '<span class="hero-ico" style="width:56px;height:56px;border-radius:16px;background:var(--coral-soft);color:var(--coral)">'+svg("flame",26,1.6)+'</span>'
+      + '<div style="flex:1">'
+        + '<div style="display:flex;align-items:baseline;gap:8px"><b style="font-family:var(--display);font-weight:700;font-size:30px;letter-spacing:-.02em;font-variant-numeric:tabular-nums">'+st+'</b>'
+        + '<span style="font-size:14px;font-weight:600;color:var(--muted)">'+(st===1?"dag":"dagen")+' op rij</span></div>'
+        + '<div class="small">Langste reeks tot nu toe: '+Math.max(state.bestStreak, st)+'</div>'
+      + '</div></div>';
+
+    out += '<div class="group">'
+      + '<div class="label-row"><span class="label">Laatste 4 weken</span><span class="meta">'+done+' dagen</span></div>'
+      + '<div class="card card--tight">'
+        + '<div class="cal" style="margin-bottom:12px">'+DAYS.map(function(d){return '<span class="cal-head">'+d+'</span>';}).join("")+'</div>'
+        + '<div class="cal">'+cells+'</div>'
+        + '<div class="legend"><span><i class="chip"></i>beantwoord</span><span><i class="chip chip--miss"></i>gemist</span><span><i class="chip chip--today"></i>vandaag</span></div>'
+      + '</div></div>';
+
+    out += '<div class="stats">'
+      + '<div class="stat"><b>'+state.xp+'</b><span>XP totaal</span></div>'
+      + '<div class="stat"><b>'+state.answered+'</b><span>vragen gedaan</span></div>'
+      + '<div class="stat"><b>'+acc+'%</b><span>goed beantwoord</span></div></div>';
+
+    out += '<div class="group"><div class="label">Niveau</div><div class="card">'
+      + '<div class="label-row"><span class="h3">'+esc(lv.cur.name)+'</span><span class="meta">'+(lv.idx+1)+' van '+LEVELS.length+'</span></div>'
+      + '<div class="track track--plain" style="margin-top:14px"><i style="width:'+pct+'%"></i></div>'
+      + '<div class="small" style="margin-top:10px">'+(lv.next ? "Nog "+(lv.next.min-state.xp)+" XP tot "+esc(lv.next.name)+"." : "Je staat op het hoogste niveau.")+'</div>'
+    + '</div></div>';
+
+    out += '<div class="group"><div class="label">Niveaus</div><div class="ladder">'
+      + LEVELS.map(function(l, i){
+          var cls = i < lv.idx ? "step is-done" : (i === lv.idx ? "step is-now" : "step");
+          return '<div class="'+cls+'"><i></i><b>'+esc(l.name)+'</b><span>'+l.min+' XP</span></div>';
+        }).join("")
+    + '</div></div>';
+
+    return out + '</div>';
+  }
+
+  function viewCohort(){
+    var rows = Net.board.slice();
+    var mine = null, i;
+    for(i=0;i<rows.length;i++){ if(rows[i].id === Net.uid) mine = rows[i]; }
+    if(!mine) rows.push({id: Net.uid || "me", xp: state.xp, streak: streak(), me:true});
+    rows.sort(function(a,b){ return (b.xp||0) - (a.xp||0); });
+
+    var out = '<div class="stack">';
+
+    if(Net.mode !== "shared"){
+      out += '<div class="note">'+svg("phone",18)+'<span>De ranglijst werkt zodra meer deelnemers de app openen. Nu zie je alleen je eigen voortgang, want die staat op dit apparaat.</span></div>';
+    }
+
+    out += '<div class="group">'
+      + '<div class="label-row"><span class="label">Ranglijst</span><span class="meta">'+rows.length+' '+(rows.length===1?"deelnemer":"deelnemers")+'</span></div>'
+      + '<div class="card card--flush"><div class="rows">'
+      + rows.map(function(r, idx){
+          var me = r.id === Net.uid || r.me;
+          return '<div class="row'+(me?" row--me":"")+'">'
+            + '<span class="rank">'+(idx+1)+'</span>'
+            + '<span class="avatar'+(me?" avatar--me":"")+'" data-uid="'+esc(r.id)+'">'+(me?"J":"")+'</span>'
+            + '<span class="row-name" data-name="'+esc(r.id)+'">'+(me?"Jij":"Deelnemer")+'</span>'
+            + '<span class="row-xp">'+(r.xp||0)+'</span>'
+          + '</div>';
+        }).join("")
+      + '</div></div></div>';
+
+    out += '<div class="note">'+svg("info",18)+'<span>Anderen zien alleen je naam en je XP, nooit je antwoorden.</span></div>';
+
+    return out + '</div>';
+  }
+
+  function viewProfiel(){
+    var d = state.domain ? DOMAINS[state.domain].name : "Niet ingesteld";
+    var out = '<div class="stack">';
+
+    out += '<div class="card card--tight split">'
+      + '<span class="avatar avatar--me" style="width:48px;height:48px;font-size:17px" data-uid="'+esc(Net.uid||"")+'">'+esc((state.naam||"J").charAt(0).toUpperCase())+'</span>'
+      + '<div style="flex:1"><div class="h3" data-name="'+esc(Net.uid||"")+'">'+esc(state.naam || "Deelnemer")+'</div>'
+      + '<div class="small">'+esc(state.cursus)+'</div></div></div>';
+
+    out += '<div class="group"><div class="label">Instellingen</div><div class="card card--flush"><div class="rows">'
+      + '<div class="row"><span class="row-name">Vakgebied</span><span class="row-xp">'+esc(d)+'</span></div>'
+      + '<div class="row"><span class="row-name">Voortgang bewaard</span><span class="row-xp">'+(Net.mode==="shared"?"In Skill Streak":"Op dit apparaat")+'</span></div>'
+      + '<div class="row"><span class="row-name">Gekoppeld aan LearnDash</span><span class="row-xp">Nog niet</span></div>'
+    + '</div></div></div>';
+
+    out += '<div class="group"><div class="label">Pilot</div><div class="card card--tight demo">'
+      + '<div class="small">'+(Net.mode==="shared"
+          ? "Je voortgang staat in Skill Streak zelf en komt terug op elk apparaat waarop je inlogt. Er gaat nog niets naar LearnDash."
+          : "Je voortgang staat in deze browser. Open je de app ergens anders, dan begin je daar opnieuw.")+'</div>'
+      + '<button class="btn btn--quiet" type="button" data-act="reset">Opnieuw beginnen</button>'
+    + '</div></div>';
+
+    return out + '</div>';
+  }
+
+  function viewTask(){
+    var task = TASKS[state.weekIndex % TASKS.length];
+    return '<div class="screen--plain">'
+      + '<div class="topbar"><button class="iconbtn" type="button" data-act="closeView" aria-label="Terug">'+svg("back",16,2)+'</button>'
+      + '<span class="h3" style="flex:1">Challenge</span>'
+      + '<span class="tag tag--mint">Ontgrendeld</span></div>'
+      + '<div class="grow" style="display:flex;flex-direction:column;gap:18px;padding-top:8px">'
+        + '<div><div class="meta">'+esc(task.course)+'</div>'
+        + '<div style="font-size:19px;font-weight:700;line-height:1.4;letter-spacing:-.01em;margin-top:8px">'+esc(task.t)+'</div></div>'
+        + '<div class="note">'+svg("bulb",18)+'<span>'+esc(task.tip)+'</span></div>'
+        + '<div class="field"><label for="reflectie">Wat viel je op? (optioneel)</label>'
+        + '<textarea id="reflectie" rows="4" placeholder="Bijvoorbeeld: wat het je oplevert, of wat lastig was."></textarea></div>'
+        + '<div class="card card--tight split"><span class="choice-ico" style="background:var(--yellow-soft);color:var(--yellow-ink)">'+svg("star",18)+'</span>'
+        + '<span style="flex:1;font-size:13.5px;font-weight:600">Inleveren levert 50 XP op</span></div>'
+      + '</div>'
+      + '<div class="foot"><button class="btn" type="button" data-act="submitTask">Markeer als ingeleverd</button>'
+      + '<button class="btn btn--quiet" type="button" data-act="closeView">Later deze cyclus</button></div>'
+    + '</div>';
+  }
+
+  function viewTaskDone(){
+    var task = TASKS[(state.weekIndex - 1 + TASKS.length) % TASKS.length];
+    return '<div class="screen--plain">'
+      + '<div class="topbar" style="justify-content:flex-end"><button class="iconbtn" type="button" data-act="closeView" aria-label="Sluiten">'+svg("cross",16,2)+'</button></div>'
+      + '<div class="grow center" style="padding-top:32px;gap:0">'
+        + '<span class="hero-ico">'+svg("check",34,2)+'</span>'
+        + '<div class="h2" style="margin-top:22px">Challenge ingeleverd</div>'
+        + '<div class="lead" style="margin-top:8px;max-width:30ch">Mooi werk. Je hebt de opdracht uit '+esc(task.course.split(" · ")[0])+' toegepast op je eigen werk.</div>'
+        + '<div class="pill" style="margin-top:16px">'+svg("star",16)+'+50 XP</div>'
+        + (state.reflection ? '<div class="card card--tight" style="margin-top:28px;width:100%;text-align:left"><div class="meta">Jouw notitie</div><div style="font-size:14.5px;line-height:1.55;margin-top:8px">'+esc(state.reflection)+'</div></div>' : '')
+        + '<div class="note" style="margin-top:20px;width:100%">'+svg("clock",18)+'<span>Nieuwe cyclus gestart. Na '+WEEK_GOAL+' vragen opent de volgende challenge.</span></div>'
+      + '</div>'
+      + '<div class="foot"><button class="btn" type="button" data-act="closeView">Terug naar vandaag</button></div>'
+    + '</div>';
+  }
+
+  function viewBonus(){
+    return '<div class="screen--plain">'
+      + '<div class="topbar" style="justify-content:flex-end"><button class="iconbtn" type="button" data-act="closeView" aria-label="Sluiten">'+svg("cross",16,2)+'</button></div>'
+      + '<div class="grow center" style="padding-top:40px;gap:0">'
+        + '<span class="hero-ico hero-ico--xp">'+svg("star",36,1.6)+'</span>'
+        + '<div class="h2" style="margin-top:24px">Dagbonus verdiend</div>'
+        + '<div class="lead" style="margin-top:8px;max-width:30ch">Je deed vandaag drie extra vragen na je dagelijkse vraag. Dat levert een bonus op.</div>'
+        + '<div class="pill" style="margin-top:20px">'+svg("star",16)+'+15 XP</div>'
+        + '<div class="note" style="margin-top:28px;width:100%">'+svg("flame",18)+'<span>Je streak staat op '+streak()+' en je XP op '+state.xp+'.</span></div>'
+      + '</div>'
+      + '<div class="foot"><button class="btn" type="button" data-act="closeView">Terug naar vandaag</button>'
+      + '<button class="btn btn--ghost" type="button" data-act="practice">Nog een vraag doen</button></div>'
+    + '</div>';
+  }
+
+  /* ---------- onboarding ---------- */
+
+  function viewWelcome(){
+    function feat(icon, title, body){
+      return '<div class="feature"><span class="feature-ico">'+svg(icon,18)+'</span>'
+        + '<div style="flex:1"><div style="font-size:14.5px;font-weight:700">'+title+'</div>'
+        + '<div class="small" style="margin-top:2px">'+body+'</div></div></div>';
+    }
+    var known = Net.mode === "shared" && state.naam;
+    return '<div class="screen--plain">'
+      + '<div class="grow" style="padding-top:64px">'
+        + '<span class="mark" style="width:52px;height:52px;border-radius:14px">'
+        + '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></span>'
+        + '<div class="h1" style="margin-top:28px">Elke dag iets scherper</div>'
+        + '<div class="lead" style="margin-top:12px">Skill Streak houdt je kennis uit je ADA-leertraject warm met een vraag per dag. Een minuut werk, en je blijft bij.</div>'
+        + '<div style="margin-top:36px;display:flex;flex-direction:column;gap:20px">'
+          + feat("clock","Een vraag per dag","Afwisselend vakkennis en softskills, afgestemd op jouw cursus.")
+          + feat("flame","Bouw je streak op","Zie je voortgang, je niveau en hoe je cohort het doet.")
+          + feat("target","Challenge uit je cursus","Elke cyclus een opdracht die je meteen op je werk toepast.")
+        + '</div>'
+      + '</div>'
+      + '<div class="foot">'
+        + (known
+            ? '<div class="note" style="margin-bottom:4px">'+svg("check",18)+'<span>Je bent herkend als '+esc(state.naam)+'. Je voortgang wordt bewaard.</span></div>'
+            : '')
+        + '<button class="btn" type="button" data-act="go" data-v="'+(known?"domain":"login")+'">Beginnen</button>'
+        + (known ? '' : '<button class="btn btn--ghost" type="button" data-act="go" data-v="keuze">Nog geen deelnemer? Doe de keuzetool</button>')
+      + '</div>'
+    + '</div>';
+  }
+
+  var KEUZE = [
+    {q:"Wat spreekt je het meest aan?", o:[
+      {label:"Zelf dingen bouwen met AI", sub:"Prototypes, automatiseringen, tools", tag:"bouwen", icon:"code"},
+      {label:"Begrijpen hoe AI en data werken", sub:"Concepten, modellen, toepassingen", tag:"begrijpen", icon:"info"}
+    ]},
+    {q:"Hoeveel ervaring heb je met data of programmeren?", o:[
+      {label:"Weinig tot geen ervaring", sub:"Ik begin bij de basis", tag:"beginner", icon:"bulb"},
+      {label:"Ik heb hier al mee gewerkt", sub:"Ik wil de diepte in", tag:"gevorderd", icon:"chart"}
+    ]}
+  ];
+  var ADVIES = {
+    bouwen_beginner:"A31 · Working with AI",
+    bouwen_gevorderd:"A30 · Programming with AI (Claude Code)",
+    begrijpen_beginner:"A03 · AI Fundamentals",
+    begrijpen_gevorderd:"A16 · Deep Learning with Python"
+  };
+
+  function viewKeuze(){
+    var i = state.keuzeIndex;
+    if(i >= KEUZE.length){
+      return '<div class="screen--plain">'
+        + '<div class="topbar"><button class="iconbtn" type="button" data-act="go" data-v="welcome" aria-label="Terug">'+svg("back",16,2)+'</button></div>'
+        + '<div class="grow center" style="padding-top:48px;gap:0">'
+          + '<span class="hero-ico">'+svg("check",32,2)+'</span>'
+          + '<div class="h2" style="margin-top:22px">Dit past bij jou</div>'
+          + '<div class="tag" style="margin-top:14px;font-size:12.5px;padding:8px 14px">'+esc(state.advies)+'</div>'
+          + '<div class="lead" style="margin-top:16px">Bij aanmelding krijg je een account voor de ADA-leeromgeving. Daarmee log je ook in bij Skill Streak.</div>'
+        + '</div>'
+        + '<div class="foot"><button class="btn" type="button" data-act="go" data-v="login">Verder</button></div>'
+      + '</div>';
+    }
+    var k = KEUZE[i];
+    return '<div class="screen--plain">'
+      + '<div class="topbar"><button class="iconbtn" type="button" data-act="keuzeBack" aria-label="Terug">'+svg("back",16,2)+'</button>'
+      + '<div class="bar"><i style="width:'+((i)/KEUZE.length*100)+'%"></i></div>'
+      + '<span class="meta">'+(i+1)+' van '+KEUZE.length+'</span></div>'
+      + '<div class="grow" style="padding-top:28px">'
+        + '<div class="label">Keuzetool</div>'
+        + '<div class="h2" style="margin-top:10px">'+esc(k.q)+'</div>'
+        + '<div style="margin-top:28px;display:flex;flex-direction:column;gap:12px">'
+        + k.o.map(function(o, idx){
+            return '<button class="choice" type="button" data-act="keuzePick" data-v="'+idx+'">'
+              + '<span class="choice-ico">'+svg(o.icon,20)+'</span>'
+              + '<span style="flex:1"><b>'+esc(o.label)+'</b><em>'+esc(o.sub)+'</em></span></button>';
+          }).join("")
+        + '</div></div>'
+      + '<div class="foot"><button class="btn btn--quiet" type="button" data-act="go" data-v="login">Ik heb al een ADA-account</button></div>'
+    + '</div>';
+  }
+
+  function viewLogin(){
+    return '<div class="screen--plain">'
+      + '<div class="topbar"><button class="iconbtn" type="button" data-act="go" data-v="welcome" aria-label="Terug">'+svg("back",16,2)+'</button></div>'
+      + '<div class="grow" style="padding-top:24px">'
+        + '<div class="h2">Hoe heet je?</div>'
+        + '<div class="lead" style="margin-top:10px">In de pilot vul je je naam zelf in. Straks logt de app in met je ADA-account en komt je naam daaruit.</div>'
+        + '<div style="margin-top:32px" class="field"><label for="naam">Je naam</label>'
+        + '<input id="naam" type="text" placeholder="Bijvoorbeeld Olivier" value="'+esc(state.naam)+'"></div>'
+        + '<div class="note" style="margin-top:28px">'+svg("info",18)+'<span>'+(Net.mode==="shared"
+            ? "Je voortgang wordt bewaard en verschijnt in de ranglijst van je cohort."
+            : "Je voortgang blijft in deze browser. Er wordt niets verstuurd.")+'</span></div>'
+      + '</div>'
+      + '<div class="foot"><button class="btn" type="button" data-act="login">Verder</button></div>'
+    + '</div>';
+  }
+
+  function viewDomain(){
+    var picked = state.domain;
+    return '<div class="screen--plain">'
+      + '<div class="topbar"><button class="iconbtn" type="button" data-act="go" data-v="welcome" aria-label="Terug">'+svg("back",16,2)+'</button>'
+      + '<span class="meta">Stap 2 van 3</span></div>'
+      + '<div class="grow" style="padding-top:24px">'
+        + '<div class="h2">Waar werk je?</div>'
+        + '<div class="lead" style="margin-top:10px">Dan mengen we toepassingsvragen uit jouw vakgebied door je dagelijkse vragen. Je kunt dit later aanpassen.</div>'
+        + '<div class="field" style="margin-top:28px"><label for="functie">Functietitel of LinkedIn-profiel</label>'
+        + '<input id="functie" type="text" placeholder="Bijvoorbeeld Marketing Manager" value="'+esc(state.domainInput)+'"></div>'
+        + '<div class="chips" style="margin-top:16px">'
+        + Object.keys(DOMAINS).map(function(k){
+            return '<button class="chipbtn'+(picked===k?" is-on":"")+'" type="button" data-act="pickDomain" data-v="'+k+'">'+esc(DOMAINS[k].name)+'</button>';
+          }).join("")
+        + '</div>'
+        + (picked ? '<div class="fb fb--good" style="margin-top:28px"><span class="fb-icon">'+svg("check",15,3)+'</span>'
+            + '<div style="flex:1"><div class="fb-title">Vakgebied: '+esc(DOMAINS[picked].name)+'</div>'
+            + '<div class="fb-body">Elke derde vraag komt straks uit dit vakgebied.</div></div></div>' : '')
+      + '</div>'
+      + '<div class="foot"><button class="btn" type="button" data-act="analyze">'+(picked ? "Verder naar de starttoets" : "Analyseer")+'</button>'
+      + '<button class="btn btn--quiet" type="button" data-act="skipDomain">Overslaan</button></div>'
+    + '</div>';
+  }
+
+  function intakeSet(){
+    var d = state.domain ? DOMAINS[state.domain] : null;
+    var list = [MIX[0], MIX[1], MIX[2], MIX[3]];
+    list.push(d ? Object.assign({type:"domain", domainName:d.name}, d.qs[0]) : MIX[4]);
+    return list;
+  }
+
+  function viewIntake(){
+    var qs = intakeSet();
+    var i = state.intakeIndex;
+    if(i >= qs.length){
+      var lv = LEVELS[Math.min(state.intakeCorrect, LEVELS.length-1)];
+      return '<div class="screen--plain">'
+        + '<div class="grow center" style="padding-top:56px;gap:0">'
+          + '<span class="hero-ico">'+svg("check",32,2)+'</span>'
+          + '<div class="label" style="margin-top:22px">Je startniveau</div>'
+          + '<div class="h2" style="margin-top:8px">'+esc(lv.name)+'</div>'
+          + '<div class="small" style="margin-top:8px">'+state.intakeCorrect+' van de '+qs.length+' goed. Je start op '+lv.min+' XP.</div>'
+          + '<div class="ladder" style="margin-top:36px;width:100%">'
+          + LEVELS.map(function(l, idx){
+              var cur = LEVELS.indexOf(lv);
+              var cls = idx < cur ? "step is-done" : (idx === cur ? "step is-now" : "step");
+              return '<div class="'+cls+'"><i></i><b>'+esc(l.name)+'</b><span>'+l.min+' XP</span></div>';
+            }).join("")
+          + '</div></div>'
+        + '<div class="foot"><button class="btn" type="button" data-act="finishIntake">Naar Skill Streak</button></div>'
+      + '</div>';
+    }
+    var q = qs[i];
+    return '<div class="screen--plain">'
+      + '<div class="topbar"><button class="iconbtn" type="button" data-act="go" data-v="domain" aria-label="Terug">'+svg("back",16,2)+'</button>'
+      + '<div class="bar"><i style="width:'+(i/qs.length*100)+'%"></i></div>'
+      + '<span class="meta">'+(i+1)+'/'+qs.length+'</span></div>'
+      + '<div class="grow" style="padding-top:24px;display:flex;flex-direction:column;gap:16px">'
+        + '<div class="tagrow"><span class="tag">Starttoets</span><span class="meta">Bepaalt je startniveau</span></div>'
+        + '<div class="q">'+esc(q.q)+'</div>'
+        + '<div class="opts">'
+        + q.o.map(function(o, idx){
+            var on = state.intakePick === idx;
+            return '<button class="opt'+(on?" opt--right":"")+'" type="button" data-act="intakePick" data-v="'+idx+'">'
+              + '<span class="radio'+(on?" radio--on":"")+'"></span><span style="flex:1">'+esc(o)+'</span></button>';
+          }).join("")
+        + '</div></div>'
+      + '<div class="foot"><button class="btn" type="button" data-act="intakeNext"'+(state.intakePick===null?' disabled style="opacity:.45"':'')+'>Bevestigen</button></div>'
+    + '</div>';
+  }
+
+  /* ---------- render ---------- */
+
+  function render(){
+    var app = document.getElementById("app");
+    if(!app) return;
+
+    if(state.step !== "app"){
+      var html = "";
+      if(state.step === "welcome") html = viewWelcome();
+      else if(state.step === "keuze") html = viewKeuze();
+      else if(state.step === "login") html = viewLogin();
+      else if(state.step === "domain") html = viewDomain();
+      else html = viewIntake();
+      app.innerHTML = html;
+      window.scrollTo(0,0);
+      return;
+    }
+
+    if(state.view === "task"){ app.innerHTML = viewTask(); window.scrollTo(0,0); return; }
+    if(state.view === "taskDone"){ app.innerHTML = viewTaskDone(); window.scrollTo(0,0); return; }
+    if(state.view === "bonus"){ app.innerHTML = viewBonus(); window.scrollTo(0,0); return; }
+
+    var body;
+    if(state.tab === "vandaag") body = viewVandaag();
+    else if(state.tab === "voortgang") body = viewVoortgang();
+    else if(state.tab === "cohort") body = viewCohort();
+    else body = viewProfiel();
+
+    app.innerHTML = appbar() + '<div class="screen">' + body + '</div>' + tabbar();
+    paintNames();
+  }
+
+  function paintNames(){
+    if(!Net.user) return;
+    var nodes = document.querySelectorAll("[data-name]");
+    var ids = [], i;
+    for(i=0;i<nodes.length;i++){
+      var id = nodes[i].getAttribute("data-name");
+      if(id && ids.indexOf(id) < 0) ids.push(id);
+    }
+    if(!ids.length) return;
+    Net.user.profiles(ids).then(function(map){
+      var nodes2 = document.querySelectorAll("[data-name]");
+      for(var j=0;j<nodes2.length;j++){
+        var key = nodes2[j].getAttribute("data-name");
+        var p = map[key];
+        if(!p) continue;
+        var name = p.name || (key === Net.uid ? (state.naam || "Jij") : "Deelnemer");
+        nodes2[j].textContent = key === Net.uid ? (name + " (jij)") : name;
+      }
+      var avs = document.querySelectorAll("[data-uid]");
+      for(var k=0;k<avs.length;k++){
+        var uid = avs[k].getAttribute("data-uid");
+        var pr = map[uid];
+        if(pr && pr.avatarUrl){
+          var img = document.createElement("img");
+          img.src = pr.avatarUrl;
+          img.alt = "";
+          avs[k].textContent = "";
+          avs[k].appendChild(img);
+        } else if(pr && pr.name){
+          avs[k].textContent = pr.name.charAt(0).toUpperCase();
+        }
+      }
+    });
+  }
+
+  /* ---------- actions ---------- */
+
+  function answer(idx){
+    var q = questionAt(state.qIndex);
+    var right = idx === q.c;
+    var gain = q.type === "soft" ? (right ? 15 : 6) : (right ? 20 : 8);
+    var first = !answeredToday();
+
+    state.pick = idx;
+    state.lastRight = right;
+    state.lastGain = gain;
+    state.xp += gain;
+    state.answered += 1;
+    if(right){
+      state.correct += 1;
+      if(q.type === "soft") state.softCorrect += 1;
+    }
+    state.weekAnswered = Math.min(WEEK_GOAL, state.weekAnswered + 1);
+
+    if(first){
+      state.days.push(today());
+      if(state.days.length > 200) state.days = state.days.slice(-200);
+      state.lastDay = today();
+      state.practiceCount = 0;
+      var st = streak();
+      if(st > state.bestStreak) state.bestStreak = st;
+    } else {
+      state.practiceCount += 1;
+    }
+    save();
+    render();
+  }
+
+  function nextQuestion(){
+    var bonus = state.practiceCount >= 3 && state.bonusDay !== today();
+    state.qIndex += 1;
+    state.pick = null;
+    state.practiceActive = false;
+    if(bonus){
+      state.bonusDay = today();
+      state.xp += 15;
+      state.view = "bonus";
+    }
+    save();
+    render();
+  }
+
+  var ACTIONS = {
+    tab: function(v){ state.tab = v; state.view = null; render(); },
+    go: function(v){
+      if(v === "keuze"){ state.keuzeIndex = 0; state.keuze = []; }
+      state.step = v; save(); render();
+    },
+    keuzePick: function(v){
+      var k = KEUZE[state.keuzeIndex];
+      state.keuze.push(k.o[parseInt(v,10)].tag);
+      state.keuzeIndex += 1;
+      if(state.keuzeIndex >= KEUZE.length){
+        state.advies = ADVIES[state.keuze.join("_")] || ADVIES.begrijpen_beginner;
+        state.cursus = state.advies;
+      }
+      render();
+    },
+    keuzeBack: function(){
+      if(state.keuzeIndex === 0){ state.step = "welcome"; }
+      else { state.keuzeIndex -= 1; state.keuze.pop(); }
+      render();
+    },
+    login: function(){
+      var el = document.getElementById("naam");
+      state.naam = el && el.value.trim() ? el.value.trim() : "Deelnemer";
+      state.step = "domain";
+      save(); render();
+    },
+    pickDomain: function(v){ state.domain = state.domain === v ? null : v; render(); },
+    analyze: function(){
+      var el = document.getElementById("functie");
+      if(el) state.domainInput = el.value;
+      if(!state.domain){
+        var d = detectDomain(state.domainInput);
+        if(d){ state.domain = d; render(); return; }
+        toast("Geen match gevonden, kies hieronder je vakgebied");
+        return;
+      }
+      state.step = "intake"; state.intakeIndex = 0; state.intakeCorrect = 0; state.intakePick = null;
+      save(); render();
+    },
+    skipDomain: function(){
+      state.domain = null;
+      state.step = "intake"; state.intakeIndex = 0; state.intakeCorrect = 0; state.intakePick = null;
+      save(); render();
+    },
+    intakePick: function(v){ state.intakePick = parseInt(v,10); render(); },
+    intakeNext: function(){
+      if(state.intakePick === null) return;
+      var qs = intakeSet();
+      if(state.intakePick === qs[state.intakeIndex].c) state.intakeCorrect += 1;
+      state.intakeIndex += 1;
+      state.intakePick = null;
+      render();
+    },
+    finishIntake: function(){
+      var lv = LEVELS[Math.min(state.intakeCorrect, LEVELS.length-1)];
+      state.xp = lv.min;
+      state.step = "app";
+      state.tab = "vandaag";
+      save(); render();
+    },
+    answer: function(v){ if(state.pick === null) answer(parseInt(v,10)); },
+    next: function(){ nextQuestion(); },
+    practice: function(){
+      state.view = null;
+      state.pick = null;
+      state.tab = "vandaag";
+      state.practiceActive = true;
+      render();
+    },
+    openTask: function(){ state.view = "task"; render(); },
+    closeView: function(){ state.view = null; state.tab = "vandaag"; render(); },
+    submitTask: function(){
+      var el = document.getElementById("reflectie");
+      state.reflection = el ? el.value.trim().slice(0,280) : "";
+      state.xp += 50;
+      state.tasksDone += 1;
+      state.weekAnswered = 0;
+      state.weekIndex += 1;
+      state.view = "taskDone";
+      save(); render();
+    },
+    reset: function(){
+      var naam = state.naam;
+      state = fresh();
+      state.naam = naam;
+      save(); render();
+    }
+  };
+
+  document.addEventListener("click", function(e){
+    var el = e.target.closest ? e.target.closest("[data-act]") : null;
+    if(!el) return;
+    var fn = ACTIONS[el.getAttribute("data-act")];
+    if(fn){ e.preventDefault(); fn(el.getAttribute("data-v")); }
+  });
+
+  /* ---------- boot ---------- */
+
+  function boot(initial){
+    apply(initial && typeof initial.xp === "number" ? initial : loadLocal());
+    render();
+    connect();
+  }
+
+  function connect(){
+    if(!(window.claude && typeof window.claude.use === "function")) return;
+
+    window.claude.use("user").then(function(u){
+      if(!u) return null;
+      Net.user = u;
+      return u.me();
+    }).then(function(me){
+      if(!me) return;
+      Net.uid = me.id;
+      if(me.name && !state.naam) state.naam = me.name;
+      return window.claude.use("db");
+    }).then(function(db){
+      if(!db || !Net.uid) return;
+      Net.db = db;
+      return db.doc("players/" + Net.uid).get().then(function(snap){
+        if(snap.exists){
+          var remote = snap.data();
+          var local = loadLocal();
+          if(!local || (remote.xp || 0) >= (local.xp || 0)) apply(remote);
+        }
+        Net.mode = "shared";
+        render();
+        watchBoard();
+        if(state.step === "app") save();
+      });
+    }).catch(function(){ /* blijft lokaal */ });
+  }
+
+  function watchBoard(){
+    if(!Net.db || Net.unsub) return;
+    try{
+      Net.unsub = Net.db.collection("players").orderBy("xp","desc").limit(25).onSnapshot(function(snap){
+        var rows = [];
+        snap.docs.forEach(function(d){
+          var v = d.data() || {};
+          rows.push({id:d.id, xp:v.xp || 0, streak:v.streak || 0});
+        });
+        Net.board = rows;
+        if(state.step === "app" && state.tab === "cohort") render();
+      }, function(){ /* stil degraderen */ });
+    }catch(e){}
+  }
+
+  if(window.claude && window.claude.hot && window.claude.hot.ready){
+    window.claude.hot.ready(function(data){ boot(data); });
+  } else {
+    boot(window.claude && window.claude.hot ? window.claude.hot.data : null);
+  }
+})();
+</script>
+</body>
+</html>
